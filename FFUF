@@ -1,0 +1,38 @@
+FFUF
+
+При запуске фаззинга ffuf покажет вам все параметры, с которыми он отправляет серверу запросы. Они будут удобочитаемо выведены в консоль. 
+Убедитесь, что все параметры выставлены верно
+
+Фаззинг директорий и файлов:
+ffuf -u "http://testphp.vulnweb.com/FUZZ" -fs 16,153,276,4958 -c -t 100 -e .php,.html -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -mc all
+
+-u – URL, 
+-w – словари, 
+-fs исключаем ответы с размером 16,153,276,4958 (выбираем размер ответов от неудачных попыток, чтобы отфильтровать ненужные результаты), 
+-с – выделение цветом, 
+-t – количество потоков (по умолчанию 10), 
+-e .php,.html – указываем расширения файлов, которые ищем, 
+–mc all – все коды ответа сервера.
+
+Брут формы авторизации:
+ffuf -u "http://testphp.vulnweb.com/userinfo.php" -X POST -H "Content-Type: application/x-www-formurlencoded" -d "uname=HFUZZ&pass=WFUZZ" -w /usr/share/wfuzz/wordlist/general/test.txt:HFUZZ-w /usr/share/wfuzz/wordlist/general/test.txt:WFUZZ -c -fs 14 -t 100 -mc all
+
+-u –URL, 
+-X – тип запроса (POST), 
+-H – заголовок, 
+-d – POST-параметры, 
+-w – словари, 
+-c – выделение цветом, 
+-fs – фильтрация, 
+-t – количество потоков, 
+-mc – все коды ответов
+
+Фаззинг GET-параметров (предположим необходимо найти имя GET-параметра в вебприложении):
+ffuf -u "http://web-site/?FUZZ" -fs 626 -c -t 100 -w /SecLists-master/Discovery/Web-Content/burpparameter-names.txt -mc all
+
+-u –URL, 
+-w – словари, 
+-c – выделение цветом, 
+-fs – фильтрация (после первого запуска команды появится просто «лавина» ответов от сервера, нам необходимо выбрать для фильтра размер большинства ответов), 
+-t – количество потоков, 
+-mc – все коды ответов
