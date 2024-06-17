@@ -32,6 +32,11 @@ find  / -exec cat -s {} \; 2>/dev/null | awk -r '/ctf/{print}'   - как кру
 
 В докерах пароли ищем в /var/www/html/data/users
 
+Как ломать архивы:
+zip2john 1.zip > ziphash
+john ziphash
+unzip 1.zip
+
 Дополнительно смотрим список всех пользователей в /etc/passwd и перебираем их пароли (все что мы уже находили раньше)
 Перебирать можно, например, так:
 https://github.com/byt3bl33d3r/CrackMapExec/wiki/SSH-Command-Reference
@@ -105,6 +110,8 @@ socks5 127.0.0.1 7777
 ssh hannah@192.168.1.108 -i id_rsa -p 61000
 ssh -i ~/id_rsa -q -f -N -p 22 frog@10.123.1.210 -L 127.0.0.1:9922:10.2.1.22:2222
 Не забываем предварительно сделать chmod 600 id_rsa
+- Ходить можно и с пивотингом
+proxychains -q ssh root@1.1.35.33 -i .ssh/id_rsa
 
 Еще его можно ломать:
 /usr/share/john/ssh2john.py id_rsa > id_rsa.txt
