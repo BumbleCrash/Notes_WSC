@@ -75,3 +75,7 @@ ssh -D [local_port] [username]@[ssh_server]
 ssh hannah@192.168.1.108 -i id_rsa -p 61000
 ssh -i ~/id_rsa -q -f -N -p 22 frog@10.123.1.210 -L 127.0.0.1:9922:10.2.1.22:2222
 Не забываем предварительно сделать chmod 600 id_rsa
+
+Еще его можно ломать:
+/usr/share/john/ssh2john.py id_rsa > id_rsa.txt
+john id_rsa.txt --wordlist=/usr/share/wordlists/rockyou.txt
