@@ -9,3 +9,14 @@ ettercap -Tqr /пакет_трафика
 Выгружаем файлики с секретными ключами
 ерем из них уникальные пары по и добавляем их в настройки протокола ESP чтобы его декодировать (заполняем все строчки!)
 Потом по FTP вытягиваем файлы (если есть фтп)
+
+Statistics > Endpoints
+locate the IPv4 address, and right-click Apply as Filter > …Selected
+Based on the idea of malicious file over TCP port 80 (HTTP), append the filter with http.request
+Follow > TCP Stream
+File > Export Objects > HTTP
+sha256sum  > VirusTotal
+After - switch back to WireShark and look through the other GET requests.
+You can more post-infection GET requests from the victim’s IP address. Maybie infection
+
+https://gist.github.com/githubfoam/08efac0343f98bd727caa32e6c81f655
