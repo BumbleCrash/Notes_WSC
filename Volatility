@@ -19,7 +19,8 @@ Volatility 3:
 exiftool '/home/kali/volatility3/file.*.exe.dat'
 
 
-
+Выводы ПО лучше сохранять в файлики чтобы спокойно к ним возвращаться
+Например, если мы сохраняем себе вывод filescan то всегда знаем расположение файлов для выгрузки (оффсет)
 
 
 
@@ -30,6 +31,13 @@ volatility_2.6_win64_standalone.exe -f файл imageinfo
 Если вдруг профиль нее определяется:
 volatility_2.6_win64_standalone.exe -f файл kdbgscan и перебираем версии вручную пока не начнет подходить
 Так же там подбирается KDBG виртуальный адрес образца памяти
+
+Пароли и логины на OS
+vol2.exe -f KnightSquad.DMP --profile=Win7SP1x64 hashdump
+Через CrackStation находим пароль:
+
+Чтобы посмотреть, что именно было сделано пользователем через консоль, необходимо воспользоваться плагином consoles:
+vol2.exe -f KnightSquad.DMP --profile=Win7SP1x64 consoles
 
 Какие процессы активны на момент снятия дампа?
 volatility_2.6_win64_standalone.exe -f файл --profile=профиль pstree
