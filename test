@@ -78,5 +78,47 @@ if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=80)
 
 
+# Ого!
+
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>Авторизация</title>
+        </head>
+                <body>
+                        <h2>Введите логин и пароль</h2>
+                        <p style="color:red">{% if error %}{{ error }}{% endif %}</p>
+                                <form method="POST">
+                                        <label for="username">Имя пользователя</label>
+                                        <input type="text" id="username" name="username" required></input><br><br>
+                                        <label for="password">Пароль</label>
+                                        <input type="password" id="password" name="password" required></input><br><br>
+                                        <button type="submit">Войти</button>
+                                </form>
+                </body>
+</html>
+
+
+# вот так да!
+
+<!DOCTYPE html>
+<html>
+<head><title>Антихайп семья</title></head>
+<body>
+<h2>Выбери, кто тебе дорог. Мама или папа?</h2>
+<p>{% if error %}{{ error }}{% endif %}</p>
+<button onclick="location.href='admin'">Click her for admin</button>
+<button onclick="location.href='worker'">Click here for worker</button>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
 
 
