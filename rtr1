@@ -1,0 +1,121 @@
+# RTR1
+## frr
+
+frr version 8.4.4
+frr defaults traditional
+hostname dc-rtr1
+log syslog informational
+no ipv6 forwarding
+service integrated-vtysh-config
+!
+interface ens33
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 P@ssw0rd
+ no ip ospf passive
+exit
+!
+interface gre1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 2 md5 P@ssw0rd
+ ip ospf network broadcast
+ no ip ospf passive
+exit
+!
+interface gre2
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 2 md5 P@ssw0rd
+ ip ospf network broadcast
+ no ip ospf passive
+exit
+!
+interface gre3
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 2 md5 P@ssw0rd
+ no ip ospf passive
+exit
+!
+router ospf
+ passive-interface default
+ network 10.6.6.0/30 area 2
+ network 10.7.7.0/30 area 2
+ network 10.9.9.0/30 area 2
+ network 10.15.10.0/24 area 2
+ network 200.100.100.0/24 area 1
+ area 1 authentication message-digest
+ area 2 authentication message-digest
+exit
+!
+## IPSEC
+conn dc-rtr1-ekt-rtr
+        type=tunnel
+        authby=secret
+        left=200.100.100.20
+        leftsubnet=200.100.100.0/24
+        right=88.8.8.27
+        rightsubnet=88.8.8.0/27
+        leftprotoport=gre
+        rightprotoport=gre
+        leftid=dc-rtr1
+        rightid=ekt-rtr
+        ike=aes128-sha256-modp3072
+        esp=aes128-sha256
+        auto=start
+
+
+conn dc-rtr1-msk-rtr
+        type=tunnel
+        authby=secret
+        left=200.100.100.20
+        leftsubnet=200.100.100.0/24
+        right=188.181.90.2
+        rightsubnet=188.181.90.0/24
+        leftprotoport=gre
+        rightprotoport=gre
+        leftid=dc-rtr1
+        rightid=msk-rtr
+        ike=aes128-sha256-modp3072
+        esp=aes128-sha256
+        auto=start
+
+conn dc-rtr1-cloud-vm
+        type=tunnel
+        authby=secret
+        left=200.100.100.20
+        leftsubnet=200.100.100.0/24
+        right=179.13.219.70
+        rightsubnet=179.13.219.0/24
+        leftprotoport=gre
+        rightprotoport=gre
+        leftid=dc-rtr1
+        rightid=cloud-vm
+        ike=aes128-sha256-modp3072
+        esp=aes128-sha256
+        auto=start
+## keepalived
+
+! Configuration File for keepalived
+
+global_defs {
+   router_id dc-rtr1
+   vrrp_skip_check_adv_addr
+   vrrp_garp_interval 0
+   vrrp_gna_interval 0
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface ens37
+    virtual_router_id 51
+    priority 110
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        10.15.10.1
+    }
+}
+
+
+
