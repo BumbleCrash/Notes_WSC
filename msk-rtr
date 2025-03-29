@@ -1,0 +1,75 @@
+# MSK RTR
+
+### INTERFACES
+
+auto ens33
+iface ens33 inet static
+        address 188.181.90.2
+        netmask 255.255.255.0
+        gateway 188.181.90.1
+
+auto ens37
+iface ens37 inet static
+        address 192.168.1.1
+        netmask 255.255.255.0
+
+auto gre1
+iface gre1 inet static
+        address 10.7.7.2
+        netmask 255.255.255.252
+        mtu 1420
+
+        pre-up ip tunnel add gre1 mode gre remote 200.100.100.20 local 188.181.90.2 ttl 225
+        pre-up ip link set up gre1
+        post-down ip tunnel del gre1
+
+auto gre2
+iface gre2 inet static
+        address 10.5.5.2
+        netmask 255.255.255.252
+        mtu 1420
+
+        pre-up ip tunnel add gre2 mode gre remote 100.200.100.20 local 188.181.90.2 ttl 225
+        pre-up ip link set up gre2
+        post-down ip tunnel del gre2
+
+### FRRR
+
+frr version 8.4.4
+frr defaults traditional
+hostname msk-rtr
+log syslog informational
+no ipv6 forwarding
+service integrated-vtysh-config
+!
+interface ens33
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 P@ssw0rd
+ no ip ospf passive
+exit
+!
+interface gre1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 2 md5 P@ssw0rd
+ no ip ospf passive
+exit
+!
+interface gre2
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 2 md5 P@ssw0rd
+ no ip ospf passive
+exit
+!
+router ospf
+ passive-interface default
+ network 10.5.5.0/30 area 2
+ network 10.7.7.0/30 area 2
+ network 188.181.90.0/24 area 1
+ network 192.168.1.0/24 area 2
+ area 1 authentication message-digest
+ area 2 authentication message-digest
+exit
+!
+
+
+
