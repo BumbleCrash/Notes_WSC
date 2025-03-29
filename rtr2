@@ -99,3 +99,45 @@ vrrp_instance VI_1 {
 }
 
 
+
+auto ens33
+iface ens33 inet static
+        address 100.200.100.20
+        netmask 255.255.255.0
+        gateway 100.200.100.10
+
+auto ens37
+iface ens37 inet static
+        address 10.15.10.2
+        netmask 255.255.255.0
+
+auto gre1
+iface gre1 inet static
+        address 10.5.5.1
+        netmask 255.255.255.252
+        mtu 1420
+
+        pre-up ip tunnel add gre1 mode gre remote 188.181.90.2 local 100.200.100.20 ttl 225
+        pre-up ip link set up gre1
+        post-down ip tunnel del gre1
+
+
+auto gre2
+iface gre2 inet static
+        address 10.8.8.1
+        netmask 255.255.255.252
+        mtu 1420
+
+        pre-up ip tunnel add gre2 mode gre remote 88.8.8.27 local 100.200.100.20 ttl 225
+        pre-up ip link set up gre2
+        post-down ip tunnel del gre2
+
+
+
+
+
+
+
+
+
+
