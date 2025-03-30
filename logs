@@ -6,10 +6,13 @@ cat test | grep -RiP test
 
 md5sum
 
+
+
 https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
 https://gist.github.com/githubfoam/b2a577c702d4f3ee323ffd20d4838109
 
 
+https://gist.github.com/v98765/9e8acf2ceb4bf8b453f2c94a553a1772
 
 https://chat.qwen.ai/
 
