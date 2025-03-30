@@ -1,0 +1,48 @@
+grep -r "keyword" /mnt/mount_point/
+ls -laR
+grep -rwn /directory -e "pattern"
+grep -RiP test /home/kali/test
+cat test | grep -RiP test
+
+
+
+https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
+
+
+System Logs:
+        /var/log/syslog: General system log containing messages from various services and daemons.
+        /var/log/auth.log: Authentication-related events, including login attempts and user authentication.
+        /var/log/dmesg: Kernel ring buffer, which records kernel-related events and boot messages.
+
+    User Account Information:
+        /etc/passwd: User account information, including usernames, user IDs, home directories, and default shells.
+        /etc/shadow: Secure password hashes for user accounts (accessible only by privileged users).
+
+    User Activity Logs:
+        /var/log/wtmp: Records login and logout times for users.
+        /var/log/btmp: Failed login attempts (bad login attempts).
+
+    Application and Service Logs:
+        /var/log/<service_name>/: Specific log directories for various applications and services running on the system (e.g., Apache, MySQL, SSH, etc.).
+
+    Command History:
+        ~/.bash_history: Command history for each user's bash shell.
+
+    Network Connections and Traffic:
+        netstat and ss: Commands to display network connections and listening ports.
+        /var/log/ufw.log: Firewall logs (if UFW is installed and active).
+
+    System Configuration Files:
+        /etc/: Directory containing configuration files for various system services.
+
+    Rootkit and Malware Locations:
+        /sbin/: Directory containing system binaries and commands (e.g., /sbin/init, /sbin/ifconfig).
+        /usr/sbin/: Directory containing additional system binaries.
+        /usr/local/bin/: Directory containing locally installed binaries.
+
+    Temporary Files:
+        /tmp/: Directory containing temporary files (note that these files may be cleaned regularly).
+
+    Deleted Files and File Recovery:
+
+    /lost+found/: Directory where recovered files are placed after a file system check (fsck).
